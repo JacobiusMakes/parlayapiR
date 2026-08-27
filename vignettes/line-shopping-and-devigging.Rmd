@@ -1,0 +1,165 @@
+---
+title: "Line shopping and devigging in R"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Line shopping and devigging in R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+# The whole vignette runs against ParlayAPI's keyless sandbox
+# endpoints. If this machine is offline (or the API is unreachable),
+# skip evaluation so the package still builds cleanly.
+can_run <- requireNamespace("curl", quietly = TRUE) &&
+  curl::has_internet() &&
+  tryCatch(
+    nrow(parlayapiR::pa_sports(sandbox = TRUE)) > 0,
+    error = function(e) FALSE
+  )
+knitr::opts_chunk$set(eval = can_run)
+```
+
+Two habits separate profitable bettors from the rest: shopping every
+line across books before betting, and removing the bookmaker margin
+(the "vig") before comparing a price to a model. This vignette does
+both with `parlayapiR`, entirely against the keyless sandbox
+endpoints, so you can run every chunk without an API key.
+
+```{r setup}
+library(parlayapiR)
+```
+
+## 1. Pull a board of odds
+
+Sandbox mode serves synthetic but structurally identical data from
+`/v1/sandbox/` endpoints. Prices come back in American format.
+
+```{r}
+events <- pa_odds("basketball_nba", markets = "h2h", sandbox = TRUE)
+events[, c("home_team", "away_team", "commence_time")]
+```
+
+Each event carries a `bookmakers` list-column in the same shape used
+by The Odds API v4: bookmakers, then markets, then outcomes.
+
+## 2. Flatten to one row per quote
+
+```{r}
+quotes <- do.call(rbind, lapply(seq_len(nrow(events)), function(i) {
+  ev <- events[i, ]
+  books <- ev$bookmakers[[1]]
+  do.call(rbind, lapply(seq_len(nrow(books)), function(b) {
+    mkt <- books$markets[[b]][1, ]
+    outs <- mkt$outcomes[[1]]
+    data.frame(
+      event = paste(ev$away_team, "at", ev$home_team),
+      book = books$key[b],
+      outcome = outs$name,
+      american = outs$price
+    )
+  }))
+}))
+quotes$decimal <- pa_american_to_decimal(quotes$american)
+head(quotes)
+```
+
+## 3. Line shopping: the best price per outcome
+
+The whole point of aggregating 30+ sportsbooks is that someone is
+almost always off consensus. Take the best available decimal price for
+every outcome:
+
+```{r}
+best <- aggregate(decimal ~ event + outcome, data = quotes, FUN = max)
+names(best)[3] <- "best_decimal"
+best <- merge(
+  best,
+  quotes,
+  by.x = c("event", "outcome", "best_decimal"),
+  by.y = c("event", "outcome", "decimal")
+)
+best[, c("event", "outcome", "book", "best_decimal")]
+```
+
+## 4. Devig a reference book to get fair probabilities
+
+A quoted -110 / -110 market implies 52.4% for each side, which sums
+to 104.8%: the extra 4.8% is the margin. `pa_devig()` removes it.
+Here we devig one book's two-way market three ways:
+
+```{r}
+ev1 <- quotes[quotes$event == quotes$event[1], ]
+ref <- ev1[ev1$book == ev1$book[1], ]
+ref
+
+pa_devig(ref$american, odds_format = "american")
+pa_devig(ref$american, odds_format = "american", method = "additive")
+pa_devig(ref$american, odds_format = "american", method = "power")
+```
+
+The multiplicative method scales everything by the same factor. The
+power method shrinks long shots harder, which better matches the
+favorite-longshot bias in real markets. For two-way markets near even
+money the three methods agree closely.
+
+## 5. Edge: fair probability versus the best available price
+
+An edge exists when the best shopped price implies a lower probability
+than your fair estimate:
+
+```{r}
+fair <- pa_devig(ref$american, odds_format = "american", method = "power")
+comp <- data.frame(
+  outcome = ref$outcome,
+  fair_prob = fair$fair_prob,
+  best_decimal = best$best_decimal[match(
+    paste(ev1$event[1], ref$outcome),
+    paste(best$event, best$outcome)
+  )]
+)
+comp$edge <- comp$fair_prob * comp$best_decimal - 1
+comp
+```
+
+A positive `edge` means the shopped price beats the devigged fair
+price. On real (non-sandbox) data this is exactly how you find value
+created by one book lagging the market.
+
+## 6. Size the bet with the Kelly criterion
+
+```{r}
+plays <- comp[comp$edge > 0, ]
+if (nrow(plays)) {
+  plays$stake <- pa_kelly(
+    prob = plays$fair_prob,
+    odds = plays$best_decimal,
+    fraction = 0.25,
+    bankroll = 1000
+  )
+}
+plays
+```
+
+Quarter Kelly (`fraction = 0.25`) is the standard practical choice:
+full Kelly assumes your probabilities are exactly right, and they
+never are.
+
+## Going live
+
+Everything above works identically against live data. Get a free key
+(1,000 credits per month, no card required) at
+[parlay-api.com](https://parlay-api.com), then:
+
+```{r, eval = FALSE}
+pa_auth("your-api-key")
+events <- pa_odds("basketball_nba", markets = "h2h,spreads,totals")
+props <- pa_props("basketball_nba", markets = "player_points")
+closes <- pa_closing_odds("basketball_nba", season = "2024")
+```
+
+Historical odds reach back to 2005, and closing lines include more
+than 30 million player prop closes since 2022, which makes
+`pa_closing_odds()` the natural calibration target for any model you
+backtest in R.
