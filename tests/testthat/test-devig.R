@@ -28,7 +28,10 @@ test_that("additive method subtracts equal shares", {
 })
 
 test_that("power method shrinks long shots more than multiplicative", {
-  odds <- c(1.30, 11.0)
+  # A favorite-longshot market with a real overround:
+  # implied 0.80 + 0.25 = 1.05.
+  odds <- c(1.25, 4.0)
+  expect_gt(sum(pa_implied_prob(odds)), 1)
   mult <- pa_devig(odds, method = "multiplicative")
   pow <- pa_devig(odds, method = "power")
   # The long shot (second outcome) gets a smaller fair probability
