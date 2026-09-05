@@ -133,3 +133,7 @@ migration is the base URL and the key.
 MIT. R packages are often GPL-licensed by tradition, but MIT is fully
 CRAN-compatible (via the standard `MIT + file LICENSE` template) and
 matches the rest of the ParlayAPI SDK family.
+
+---
+
+Part of the [ParlayAPI](https://parlay-api.com) ecosystem: a real-time sports odds API with a free tier of 1,000 credits per month, no card required. Explore all the tools at [github.com/JacobiusMakes](https://github.com/JacobiusMakes).
