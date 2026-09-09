@@ -21,11 +21,10 @@ can_run <- requireNamespace("curl", quietly = TRUE) &&
 knitr::opts_chunk$set(eval = can_run)
 ```
 
-Two habits separate profitable bettors from the rest: shopping every
-line across books before betting, and removing the bookmaker margin
-(the "vig") before comparing a price to a model. This vignette does
-both with `parlayapiR`, entirely against the keyless sandbox
-endpoints, so you can run every chunk without an API key.
+This vignette compares prices and removes the bookmaker margin
+(the "vig") using `parlayapiR` and keyless synthetic sandbox endpoints.
+It demonstrates calculations, not a tested profitable strategy. Keep
+market definitions and outcomes aligned before comparing real quotes.
 
 ```{r setup}
 library(parlayapiR)
@@ -67,9 +66,9 @@ head(quotes)
 
 ## 3. Line shopping: the best price per outcome
 
-The whole point of aggregating 30+ sportsbooks is that someone is
-almost always off consensus. Take the best available decimal price for
-every outcome:
+For this single-market sandbox example, find the highest decimal price
+for each outcome. With real data, first check exact event, market, period
+and line identity; matching team names alone is insufficient:
 
 ```{r}
 best <- aggregate(decimal ~ event + outcome, data = quotes, FUN = max)
@@ -123,9 +122,9 @@ comp$edge <- comp$fair_prob * comp$best_decimal - 1
 comp
 ```
 
-A positive `edge` means the shopped price beats the devigged fair
-price. On real (non-sandbox) data this is exactly how you find value
-created by one book lagging the market.
+A positive `edge` means the price exceeds the threshold implied by
+this particular probability estimate. It does not establish that the
+estimate is accurate or that a wager has positive expected value.
 
 ## 6. Size the bet with the Kelly criterion
 
@@ -142,9 +141,8 @@ if (nrow(plays)) {
 plays
 ```
 
-Quarter Kelly (`fraction = 0.25`) is the standard practical choice:
-full Kelly assumes your probabilities are exactly right, and they
-never are.
+The fraction here is an illustrative input. Kelly sizing is sensitive
+to probability error; this example is not a staking recommendation.
 
 ## Going live
 
