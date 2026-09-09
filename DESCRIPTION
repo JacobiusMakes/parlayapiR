@@ -5,7 +5,8 @@ Authors@R:
     person("Jacob", "Galperin", , "jgalperi@ramapo.edu", role = c("aut", "cre"))
 Description: Query real-time and historical sports betting odds from the
     'ParlayAPI' service <https://parlay-api.com>, which aggregates odds
-    from more than 30 sportsbooks and carries historical odds from 2005.
+    from more than 30 sportsbook sources. Coverage and historical
+    availability depend on the sport, source, market, date and account.
     Provides functions for listing sports, fetching game odds and player
     props, retrieving historical and closing lines, removing the
     bookmaker margin from quoted prices ('devigging') by the

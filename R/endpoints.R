@@ -26,8 +26,8 @@ pa_sports <- function(all = FALSE, sandbox = NULL) {
 #'
 #' Fetches current odds for a sport. The response uses the same event
 #' shape as The Odds API v4 (events containing `bookmakers`, each with
-#' `markets`, each with `outcomes`), so parsing code written for that
-#' API carries over unchanged.
+#' `markets`, each with `outcomes`). Validate the returned R structures,
+#' identities and supported filters when migrating an existing client.
 #'
 #' In sandbox mode the endpoint is keyless and serves synthetic events;
 #' sandbox prices are always American regardless of `odds_format`.
@@ -136,7 +136,7 @@ pa_props <- function(sport,
 #' Get a historical odds snapshot
 #'
 #' Fetches the odds board for a sport as it stood at a past timestamp.
-#' Requires an API key; ParlayAPI's odds history reaches back to 2005.
+#' Requires an API key. Available dates vary by dataset and account access.
 #' There is no sandbox equivalent, so this function errors in sandbox
 #' mode.
 #'
@@ -181,11 +181,9 @@ pa_historical <- function(sport,
 
 #' Get historical closing odds
 #'
-#' Fetches closing lines (the final pre-game price, the sharpest single
-#' reference point for model calibration and CLV analysis). ParlayAPI
-#' carries more than 30 million player prop closing lines since 2022 on
-#' top of game closing lines. Requires an API key; errors in sandbox
-#' mode.
+#' Fetches historical closing lines for model calibration and CLV analysis.
+#' Available books, markets and dates depend on the dataset and account.
+#' Requires an API key; errors in sandbox mode.
 #'
 #' @inheritParams pa_odds
 #' @param season Optional season filter, e.g. `"2023"`.

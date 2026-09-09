@@ -5,16 +5,22 @@
 <!-- badges: end -->
 
 R client for [ParlayAPI](https://parlay-api.com), a real-time sports
-odds API covering 30+ sportsbooks, with player props, historical odds
-from 2005, and 30M+ prop closing lines since 2022. The package mirrors
-the core of the official Python SDK (`pip install parlay-api`) and adds
-the two local calculations every betting model needs: devigging and
-Kelly sizing.
+odds API with 30+ sportsbook sources, player props and historical
+endpoints. Availability varies by sport, bookmaker, market, date and
+account access. The package provides HTTP clients and local calculations
+for devigging and Kelly sizing; those calculations depend on their inputs
+and do not establish a profitable betting strategy.
 
 Built for the R modeling community: everything returns plain data
 frames, the math functions are pure R with no network dependency, and a
 sandbox mode lets you run every example, test, and the vignette without
 an API key.
+
+## Start with an offline tutorial
+
+[Prevent accidental many-to-many joins in R](tutorials/quote-joins/README.md)
+uses synthetic quotes to show why event, period, outcome and handicap line
+belong in a comparison key. Run it with base R, no packages or API key.
 
 ## Installation
 
@@ -77,7 +83,7 @@ pa_auth("your-api-key")   # or set PARLAY_API_KEY in .Renviron
 events <- pa_odds("basketball_nba", markets = "h2h,spreads,totals")
 props  <- pa_props("baseball_mlb", markets = "player_strikeouts")
 
-# Historical snapshot of the board (history back to 2005)
+# Historical snapshot, subject to dataset and account availability
 snap <- pa_historical("basketball_nba", date = "2024-10-19T12:00:00Z")
 
 # Closing lines, the calibration target for backtests
@@ -106,14 +112,11 @@ vignette("line-shopping-and-devigging", package = "parlayapiR")
 
 ## The Odds API compatibility
 
-`pa_odds()` returns the same event shape as The Odds API v4 (events
-containing `bookmakers`, then `markets`, then `outcomes`) and takes the
-same query parameters (`regions`, `markets`, `oddsFormat`,
-`bookmakers`). TOA's v4 shape is the de facto standard for odds data
-and their documentation is excellent, so parsing code written against
-it, including code written for CRAN's `oddsapiR` package, carries over
-with minimal changes. If you already have a TOA pipeline in R, the
-migration is the base URL and the key.
+`pa_odds()` uses nested event, bookmaker, market and outcome objects and
+accepts familiar filters such as regions, markets and bookmakers. Check
+the actual returned R structures, supported parameters, event identities
+and odds formats when migrating an existing client. Similar JSON shapes
+do not guarantee unchanged parsing or equivalent coverage.
 
 ## Notes for modelers
 
@@ -127,6 +130,13 @@ migration is the base URL and the key.
   to zero.
 - WebSocket streaming exists on the API (Business tier and up) but is
   not wrapped here; this package is deliberately plain HTTP.
+
+## Private data use
+
+Use your own account and API key for personal analysis or internal tools.
+The package's code license does not grant rights to publicly display odds,
+share a data feed or redistribute API data. Sandbox examples are synthetic;
+inspect actual coverage and source timestamps when working with your key.
 
 ## License
 

@@ -40,6 +40,11 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - name: Check offline quote-join tutorial
+        run: |
+          Rscript tutorials/quote-joins/odds_join.R
+          Rscript tutorials/quote-joins/test_odds_join.R
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck, any::roxygen2
