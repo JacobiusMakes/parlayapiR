@@ -22,6 +22,10 @@ an API key.
 uses synthetic quotes to show why event, period, outcome and handicap line
 belong in a comparison key. Run it with base R, no packages or API key.
 
+Featured as a Highlight in [R Weekly 2026-W38](https://rweekly.org/2026-W38.html).
+The tutorial includes a next step for checking your own books, markets and
+request budget before selecting a paid plan.
+
 ## Installation
 
 Not on CRAN yet (see [CRAN.md](CRAN.md) for the submission runbook).

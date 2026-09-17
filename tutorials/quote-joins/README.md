@@ -64,4 +64,28 @@ The accompanying tests exercise duplicate keys, opposite signs, nearly equal lin
 
 Correct identity establishes comparability only. It does not establish quote availability, recency, execution, or profitability. This example makes no timing claims and carries no real sportsbook data.
 
-Written and reviewed with AI assistance by the ParlayAPI team. For an optional connection to your own account, see the [API documentation](https://parlay-api.com/docs). Private research must use your own credentials and applicable account permissions. This tutorial grants no permission to redistribute API data publicly.
+## Try the pattern on your own project
+
+If you are building a sports model or an internal odds tool, start with one
+league, two books and one market. Check that the response contains the exact
+events, periods, outcomes and lines you need before choosing a paid plan.
+
+1. [Create a free ParlayAPI account](https://parlay-api.com/signup?utm_source=parlayapir&utm_medium=tutorial&utm_campaign=quote_joins_20260917&utm_content=start_free).
+   It includes 1,000 credits per month with no credit card required.
+2. Follow the [R client's account quickstart](../../README.md#going-live) and
+   keep your key in your own environment. Use current fixtures for the first
+   request; confirm actual records exist before relying on historical dates.
+3. [Estimate your workload](https://parlay-api.com/cost?utm_source=parlayapir&utm_medium=tutorial&utm_campaign=quote_joins_20260917&utm_content=estimate_usage)
+   from your polling interval and requested markets. Check the
+   [current plans](https://parlay-api.com/pricing?utm_source=parlayapir&utm_medium=tutorial&utm_campaign=quote_joins_20260917&utm_content=plans)
+   after verifying the data fits.
+
+Want help checking the fit? Email [support@parlay-api.com](mailto:support@parlay-api.com?subject=R%20tutorial%20project%20fit%20%5Bquote_joins_20260917%5D)
+with your league, books, markets, pregame or live requirement, and intended
+polling interval. For historical work, include the dates and sampling interval
+you need. A sanitized example response helps; leave out your API key. We can
+check a concrete request and help estimate the credits it would use.
+
+Written and reviewed with AI assistance by the ParlayAPI team. Private research
+must use your own credentials and applicable account permissions. This tutorial
+grants no permission to redistribute API data publicly.
