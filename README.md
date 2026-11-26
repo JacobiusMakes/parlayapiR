@@ -33,6 +33,11 @@ to record active time, refresh interval, required endpoints and pages, separatel
 polled sports and active days. It needs no key and makes no API request. Leave
 credit cost unknown until you verify the cost for your exact request shape.
 
+For several request shapes with different or unknown unit costs, use the
+[offline request-budget kit](https://github.com/JacobiusMakes/parlayapi-notebooks/tree/main/labs/request-budget).
+It includes a CSV template, exact JSON export and a self-contained notebook
+for Python 3.9 or later. Unpriced work keeps the total credit estimate unknown.
+
 ## Installation
 
 Not on CRAN yet (see [CRAN.md](CRAN.md) for the submission runbook).
