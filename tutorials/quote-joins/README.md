@@ -70,15 +70,18 @@ If you are building a sports model or an internal odds tool, start with one
 league, two books and one market. Check that the response contains the exact
 events, periods, outcomes and lines you need before choosing a paid plan.
 
-1. [Create a free ParlayAPI account](https://parlay-api.com/signup?utm_source=parlayapir&utm_medium=tutorial&utm_campaign=quote_joins_20260917&utm_content=start_free).
-   It includes 1,000 credits per month with no credit card required.
-2. Follow the [R client's account quickstart](../../README.md#going-live) and
-   keep your key in your own environment. Use current fixtures for the first
-   request; confirm actual records exist before relying on historical dates.
-3. [Estimate your workload](https://parlay-api.com/cost?utm_source=parlayapir&utm_medium=tutorial&utm_campaign=quote_joins_20260917&utm_content=estimate_usage)
-   from your polling interval and requested markets. Check the
-   [current plans](https://parlay-api.com/pricing?utm_source=parlayapir&utm_medium=tutorial&utm_campaign=quote_joins_20260917&utm_content=plans)
-   after verifying the data fits.
+1. [Plan your request schedule](https://parlay-api.com/tools/api-workload?utm_source=parlayapir&utm_medium=tutorial&utm_campaign=quote_joins_20260917&utm_content=estimate_usage)
+   before adding polling. Count the required endpoints and pages, active time,
+   refresh interval and active days. The free browser planner needs no account
+   or key. Leave credit cost unknown until the request's unit cost is verified.
+2. [Create your own ParlayAPI account](https://parlay-api.com/signup?utm_source=parlayapir&utm_medium=tutorial&utm_campaign=quote_joins_20260917&utm_content=start_private)
+   when you are ready for a private evaluation. Follow the
+   [R client's account quickstart](../../README.md#going-live) and keep your key
+   in your own environment. Confirm exact returned records before relying on
+   historical dates or expanding the requested scope.
+3. Read the [current plans](https://parlay-api.com/pricing?utm_source=parlayapir&utm_medium=tutorial&utm_campaign=quote_joins_20260917&utm_content=plans)
+   and documentation for current entitlement, allowances and request-cost rules.
+   A teaching exercise does not establish those account terms.
 
 Want help checking the fit? Email [support@parlay-api.com](mailto:support@parlay-api.com?subject=R%20tutorial%20project%20fit%20%5Bquote_joins_20260917%5D)
 with your league, books, markets, pregame or live requirement, and intended

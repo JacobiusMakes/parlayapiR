@@ -26,6 +26,13 @@ Featured as a Highlight in [R Weekly 2026-W38](https://rweekly.org/2026-W38.html
 The tutorial includes a next step for checking your own books, markets and
 request budget before selecting a paid plan.
 
+## Plan the first private request
+
+Use the free [API workload planner](https://parlay-api.com/tools/api-workload?utm_source=github&utm_medium=r_readme&utm_campaign=request-planning)
+to record active time, refresh interval, required endpoints and pages, separately
+polled sports and active days. It needs no key and makes no API request. Leave
+credit cost unknown until you verify the cost for your exact request shape.
+
 ## Installation
 
 Not on CRAN yet (see [CRAN.md](CRAN.md) for the submission runbook).
