@@ -18,6 +18,10 @@ an API key.
 
 ## Start with an offline tutorial
 
+[Rebuild what was known at a decision time](tutorials/point-in-time/README.md)
+replays late observations and withdrawals using base R. Try six cutoffs in
+your browser or run the same example offline.
+
 [Prevent accidental many-to-many joins in R](tutorials/quote-joins/README.md)
 uses synthetic quotes to show why event, period, outcome and handicap line
 belong in a comparison key. Run it with base R, no packages or API key.

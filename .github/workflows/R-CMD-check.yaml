@@ -45,6 +45,12 @@ jobs:
           Rscript tutorials/quote-joins/odds_join.R
           Rscript tutorials/quote-joins/test_odds_join.R
 
+      - name: Check point-in-time replay tutorial
+        working-directory: tutorials/point-in-time
+        run: |
+          Rscript replay.R
+          Rscript test_replay.R
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck, any::roxygen2
